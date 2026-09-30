@@ -1,0 +1,650 @@
+/* ============================================================
+   Design tokens
+   Concept: a dispatch board, not a marketing site. Deep graphite
+   chrome (the board) against a cool paper content area, with a
+   single road-marking amber as the accent. Status colors carry
+   real meaning (available / needs attention / urgent) rather
+   than decorating the page.
+   ============================================================ */
+:root {
+  /* Color */
+  --color-graphite: #1b1f27;
+  --color-graphite-soft: #262b35;
+  --color-paper: #f4f5f2;
+  --color-surface: #ffffff;
+  --color-border: #e2e1db;
+  --color-text: #1b1f27;
+  --color-text-muted: #6b6f76;
+  --color-text-on-graphite: #f4f5f2;
+  --color-text-on-graphite-muted: #9aa0ab;
+
+  --color-accent: #c97a1a;
+  --color-accent-hover: #b06c17;
+  --color-accent-soft: #fbe9d4;
+
+  --color-status-good: #3a7d5c;
+  --color-status-good-soft: #e3efe8;
+  --color-status-attention: #b0793a;
+  --color-status-attention-soft: #f5ead9;
+  --color-status-urgent: #b0483a;
+  --color-status-urgent-soft: #f6e3e0;
+  --color-status-neutral: #6b6f76;
+  --color-status-neutral-soft: #e9e9e7;
+
+  /* Type */
+  --font-display: "Space Grotesk", system-ui, sans-serif;
+  --font-body: "IBM Plex Sans", system-ui, sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, monospace;
+
+  /* Layout */
+  --sidebar-width: 15rem;
+  --radius-sm: 4px;
+  --radius-md: 6px;
+  --shadow-panel: 0 1px 2px rgba(27, 31, 39, 0.06), 0 1px 1px rgba(27, 31, 39, 0.04);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-body);
+  color: var(--color-text);
+  background: var(--color-paper);
+  -webkit-font-smoothing: antialiased;
+}
+
+h1,
+h2,
+h3 {
+  font-family: var(--font-display);
+  font-weight: 600;
+  margin: 0;
+  letter-spacing: -0.01em;
+}
+
+p {
+  margin: 0;
+  line-height: 1.5;
+}
+
+button,
+input,
+select {
+  font-family: inherit;
+  font-size: inherit;
+}
+
+a {
+  color: inherit;
+}
+
+/* Visible keyboard focus everywhere — never suppressed */
+:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.001ms !important;
+    transition-duration: 0.001ms !important;
+  }
+}
+
+/* ============================================================
+   Login screen
+   ============================================================ */
+.login-screen {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-graphite);
+  padding: 1.5rem;
+}
+
+.login-card {
+  width: 100%;
+  max-width: 22rem;
+}
+
+.login-mark {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+  margin-bottom: 2rem;
+}
+
+.login-mark-glyph {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--color-accent);
+  border: 1px solid var(--color-accent);
+  border-radius: var(--radius-sm);
+  padding: 0.15rem 0.4rem;
+}
+
+.login-mark-text {
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: var(--color-text-on-graphite);
+}
+
+.login-card h1 {
+  color: var(--color-text-on-graphite);
+  font-size: 1.5rem;
+  margin-bottom: 0.4rem;
+}
+
+.login-card .login-sub {
+  color: var(--color-text-on-graphite-muted);
+  font-size: 0.9rem;
+  margin-bottom: 2rem;
+}
+
+.field {
+  margin-bottom: 1.1rem;
+}
+
+.field label {
+  display: block;
+  font-size: 0.8rem;
+  color: var(--color-text-on-graphite-muted);
+  margin-bottom: 0.4rem;
+}
+
+.field input {
+  width: 100%;
+  padding: 0.6rem 0.75rem;
+  background: var(--color-graphite-soft);
+  border: 1px solid #3a4150;
+  border-radius: var(--radius-sm);
+  color: var(--color-text-on-graphite);
+}
+
+.field input::placeholder {
+  color: #565d6a;
+}
+
+.btn-primary {
+  width: 100%;
+  padding: 0.65rem 1rem;
+  background: var(--color-accent);
+  color: #1b1300;
+  font-weight: 600;
+  border: none;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  margin-top: 0.5rem;
+}
+
+.btn-primary:hover {
+  background: var(--color-accent-hover);
+}
+
+.btn-primary:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.form-error {
+  background: rgba(176, 72, 58, 0.15);
+  border: 1px solid rgba(176, 72, 58, 0.4);
+  color: #e8a99f;
+  font-size: 0.85rem;
+  padding: 0.6rem 0.75rem;
+  border-radius: var(--radius-sm);
+  margin-bottom: 1.1rem;
+}
+
+/* ============================================================
+   App shell: sidebar + content
+   ============================================================ */
+.app-shell {
+  display: flex;
+  min-height: 100vh;
+}
+
+.sidebar {
+  width: var(--sidebar-width);
+  flex-shrink: 0;
+  background: var(--color-graphite);
+  color: var(--color-text-on-graphite);
+  display: flex;
+  flex-direction: column;
+  padding: 1.25rem 1rem;
+}
+
+.sidebar-mark {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0 0.5rem;
+  margin-bottom: 2rem;
+}
+
+.sidebar-mark .login-mark-glyph {
+  font-size: 0.7rem;
+}
+
+.sidebar-mark-text {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 1rem;
+}
+
+.sidebar-nav {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  flex: 1;
+}
+
+.sidebar-nav li + li {
+  margin-top: 0.15rem;
+}
+
+.sidebar-link {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  padding: 0.55rem 0.6rem;
+  border-radius: var(--radius-sm);
+  text-decoration: none;
+  color: var(--color-text-on-graphite-muted);
+  font-size: 0.9rem;
+}
+
+.sidebar-link:hover {
+  background: var(--color-graphite-soft);
+  color: var(--color-text-on-graphite);
+}
+
+.sidebar-link.active {
+  background: var(--color-graphite-soft);
+  color: var(--color-text-on-graphite);
+  box-shadow: inset 2px 0 0 var(--color-accent);
+}
+
+.sidebar-icon {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  width: 1.1rem;
+  text-align: center;
+  color: var(--color-accent);
+}
+
+.sidebar-footer {
+  border-top: 1px solid var(--color-graphite-soft);
+  padding-top: 1rem;
+  margin-top: 1rem;
+}
+
+.sidebar-user {
+  font-size: 0.85rem;
+  margin-bottom: 0.75rem;
+}
+
+.sidebar-user-name {
+  color: var(--color-text-on-graphite);
+  display: block;
+}
+
+.sidebar-user-role {
+  color: var(--color-text-on-graphite-muted);
+  font-size: 0.75rem;
+}
+
+.btn-logout {
+  width: 100%;
+  padding: 0.5rem 0.6rem;
+  background: transparent;
+  border: 1px solid #3a4150;
+  color: var(--color-text-on-graphite-muted);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  text-align: left;
+  font-size: 0.85rem;
+}
+
+.btn-logout:hover {
+  border-color: var(--color-accent);
+  color: var(--color-text-on-graphite);
+}
+
+.content {
+  flex: 1;
+  padding: 2rem 2.5rem;
+  max-width: 64rem;
+}
+
+.content-header {
+  margin-bottom: 1.75rem;
+}
+
+.content-header h1 {
+  font-size: 1.4rem;
+}
+
+.content-header p {
+  color: var(--color-text-muted);
+  margin-top: 0.35rem;
+  font-size: 0.95rem;
+}
+
+.panel {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-panel);
+  padding: 1.5rem;
+}
+
+.placeholder-panel {
+  text-align: left;
+}
+
+.placeholder-phase {
+  display: inline-block;
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  color: var(--color-accent);
+  border: 1px solid var(--color-accent-soft);
+  background: var(--color-accent-soft);
+  border-radius: var(--radius-sm);
+  padding: 0.2rem 0.5rem;
+  margin-bottom: 0.85rem;
+}
+
+.placeholder-panel h2 {
+  font-size: 1.1rem;
+  margin-bottom: 0.5rem;
+}
+
+.placeholder-panel p {
+  color: var(--color-text-muted);
+  max-width: 34rem;
+}
+
+/* Status badges — used from Phase 3 onward, styled now so the
+   language is established: color always maps to the same meaning. */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  font-size: 0.75rem;
+  font-weight: 500;
+  padding: 0.2rem 0.55rem;
+  border-radius: 999px;
+}
+
+.badge-good {
+  background: var(--color-status-good-soft);
+  color: var(--color-status-good);
+}
+
+.badge-attention {
+  background: var(--color-status-attention-soft);
+  color: var(--color-status-attention);
+}
+
+.badge-urgent {
+  background: var(--color-status-urgent-soft);
+  color: var(--color-status-urgent);
+}
+
+.badge-neutral {
+  background: var(--color-status-neutral-soft);
+  color: var(--color-status-neutral);
+}
+
+.plate {
+  font-family: var(--font-mono);
+  font-weight: 500;
+  letter-spacing: 0.02em;
+}
+
+.loading-screen {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-graphite);
+  color: var(--color-text-on-graphite-muted);
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+}
+
+/* ============================================================
+   Phase 3+: data tables, modals, light-background forms
+   ============================================================ */
+
+/* A fifth status meaning alongside good/attention/urgent/neutral:
+   "active" for things in motion (a truck ON_TRIP) — deliberately a
+   different hue from attention-amber, so "on a trip" never reads as
+   "needs attention" at a glance. */
+:root {
+  --color-status-active: #3a6b8a;
+  --color-status-active-soft: #e2eaf0;
+}
+
+.badge-active {
+  display: inline-flex;
+  align-items: center;
+  font-size: 0.75rem;
+  font-weight: 500;
+  padding: 0.2rem 0.55rem;
+  border-radius: 999px;
+  background: var(--color-status-active-soft);
+  color: var(--color-status-active);
+}
+
+.content-header-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.btn-accent {
+  padding: 0.55rem 1rem;
+  background: var(--color-accent);
+  color: #1b1300;
+  font-weight: 600;
+  font-size: 0.9rem;
+  border: none;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.btn-accent:hover {
+  background: var(--color-accent-hover);
+}
+
+.btn-secondary {
+  padding: 0.5rem 0.9rem;
+  background: var(--color-surface);
+  color: var(--color-text);
+  font-weight: 500;
+  font-size: 0.9rem;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+}
+
+.btn-secondary:hover {
+  border-color: var(--color-text-muted);
+}
+
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+}
+
+.data-table th {
+  text-align: left;
+  font-weight: 500;
+  color: var(--color-text-muted);
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  padding: 0 0.75rem 0.6rem;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.data-table td {
+  padding: 0.75rem;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.data-table tbody tr {
+  cursor: pointer;
+}
+
+.data-table tbody tr:hover {
+  background: var(--color-paper);
+}
+
+.data-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 3rem 1rem;
+  color: var(--color-text-muted);
+}
+
+/* Modal */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(27, 31, 39, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+  z-index: 50;
+}
+
+.modal-panel {
+  background: var(--color-surface);
+  border-radius: var(--radius-md);
+  padding: 1.75rem;
+  width: 100%;
+  max-width: 26rem;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+.modal-panel h2 {
+  font-size: 1.15rem;
+  margin-bottom: 1.25rem;
+}
+
+.modal-actions {
+  display: flex;
+  gap: 0.6rem;
+  margin-top: 1.5rem;
+}
+
+.modal-actions .btn-accent,
+.modal-actions .btn-secondary {
+  flex: 1;
+}
+
+/* Form fields on a light background — distinct from .field, which is
+   styled for the dark login screen */
+.form-group {
+  margin-bottom: 1rem;
+}
+
+.form-group label {
+  display: block;
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: var(--color-text-muted);
+  margin-bottom: 0.35rem;
+}
+
+.form-group input,
+.form-group select {
+  width: 100%;
+  padding: 0.5rem 0.65rem;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  color: var(--color-text);
+}
+
+.form-group input:focus,
+.form-group select:focus {
+  border-color: var(--color-accent);
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+}
+
+/* Truck profile page */
+.profile-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.5rem;
+}
+
+.profile-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.25rem;
+}
+
+.profile-section + .profile-section {
+  margin-top: 1.25rem;
+}
+
+.profile-section h3 {
+  font-size: 0.95rem;
+  margin-bottom: 0.75rem;
+}
+
+.detail-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.45rem 0;
+  border-bottom: 1px solid var(--color-border);
+  font-size: 0.9rem;
+}
+
+.detail-row:last-child {
+  border-bottom: none;
+}
+
+.detail-row .detail-label {
+  color: var(--color-text-muted);
+}
+
+.back-link {
+  display: inline-block;
+  font-size: 0.85rem;
+  color: var(--color-text-muted);
+  text-decoration: none;
+  margin-bottom: 1rem;
+}
+
+.back-link:hover {
+  color: var(--color-text);
+}
