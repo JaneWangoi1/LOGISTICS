@@ -1,14 +1,17 @@
 const express = require('express');
 const router = express.Router();
-const { getAllTrucks, getTruckById, createTruck, updateTruck, assignDriver } = require('../controllers/trucks.controller');
+const { getAllTrucks, getTruckById, createTruck, updateTruck, deleteTruck, assignDriver } = require('../controllers/trucks.controller');
+const { createDocument } = require('../controllers/documents.controller');
+const { createMaintenance } = require('../controllers/maintenance.controller');
 const { requireAuth } = require('../middleware/auth.middleware');
 
-// Every route here requires a valid admin session — requireAuth first,
-// same pattern as auth.routes.js, and the one every future module follows.
 router.get('/', requireAuth, getAllTrucks);
 router.get('/:id', requireAuth, getTruckById);
 router.post('/', requireAuth, createTruck);
 router.put('/:id', requireAuth, updateTruck);
+router.delete('/:id', requireAuth, deleteTruck);
 router.post('/:id/assign-driver', requireAuth, assignDriver);
+router.post('/:id/documents', requireAuth, createDocument);
+router.post('/:id/maintenance', requireAuth, createMaintenance);
 
 module.exports = router;

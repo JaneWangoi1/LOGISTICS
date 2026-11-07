@@ -1,6 +1,3 @@
-// Shared shell for any module whose real screen hasn't been built yet.
-// An empty screen should still say something useful — which phase brings
-// it, and what's coming — rather than just being blank.
 export default function PlaceholderPage({ title, phase, description }) {
   return (
     <>

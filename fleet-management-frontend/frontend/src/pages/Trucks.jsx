@@ -10,15 +10,11 @@ export default function Trucks() {
   const [showAddModal, setShowAddModal] = useState(false);
   const navigate = useNavigate();
 
-  useEffect(() => {
-    loadTrucks();
-  }, []);
+  useEffect(() => { loadTrucks(); }, []);
 
   function loadTrucks() {
     setLoading(true);
-    getTrucks()
-      .then(setTrucks)
-      .finally(() => setLoading(false));
+    getTrucks().then(setTrucks).finally(() => setLoading(false));
   }
 
   async function handleAdd(data) {
@@ -34,49 +30,32 @@ export default function Trucks() {
           <h1>Trucks</h1>
           <p>{trucks.length} {trucks.length === 1 ? 'truck' : 'trucks'} in the fleet</p>
         </div>
-        <button className="btn-accent" onClick={() => setShowAddModal(true)}>
-          + Add truck
-        </button>
+        <button className="btn-accent" onClick={() => setShowAddModal(true)}>+ Add truck</button>
       </div>
-
       <div className="panel">
-        {loading ? (
-          <p>Loading…</p>
-        ) : trucks.length === 0 ? (
-          <div className="empty-state">
-            <p>No trucks yet. Add your first one to get started.</p>
-          </div>
+        {loading ? <p>Loading…</p> : trucks.length === 0 ? (
+          <div className="empty-state"><p>No trucks yet. Add your first one to get started.</p></div>
         ) : (
-          <table className="data-table">
-            <thead>
-              <tr>
-                <th>Registration</th>
-                <th>Make / Model</th>
-                <th>Year</th>
-                <th>Mileage</th>
-                <th>Status</th>
-              </tr>
-            </thead>
-            <tbody>
-              {trucks.map((truck) => (
-                <tr key={truck.id} onClick={() => navigate(`/trucks/${truck.id}`)}>
-                  <td className="plate">{truck.registrationNo}</td>
-                  <td>{[truck.make, truck.model].filter(Boolean).join(' ') || '—'}</td>
-                  <td>{truck.year || '—'}</td>
-                  <td>{truck.mileage?.toLocaleString() ?? 0} km</td>
-                  <td>
-                    <StatusBadge status={truck.status} config={TRUCK_STATUS_CONFIG} />
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+          <div className="table-scroll">
+            <table className="data-table">
+              <thead><tr><th>Registration</th><th>Make / model</th><th>Year</th><th>Capacity</th><th>Mileage</th><th>Status</th></tr></thead>
+              <tbody>
+                {trucks.map((truck) => (
+                  <tr key={truck.id} onClick={() => navigate(`/trucks/${truck.id}`)}>
+                    <td className="plate">{truck.registrationNo}</td>
+                    <td>{[truck.make, truck.model].filter(Boolean).join(' ') || '—'}</td>
+                    <td>{truck.year || '—'}</td>
+                    <td>{truck.capacityTonnes != null ? `${Number(truck.capacityTonnes)} t` : '—'}</td>
+                    <td>{truck.mileage?.toLocaleString() ?? 0} km</td>
+                    <td><StatusBadge status={truck.status} config={TRUCK_STATUS_CONFIG} /></td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         )}
       </div>
-
-      {showAddModal && (
-        <TruckFormModal onSave={handleAdd} onClose={() => setShowAddModal(false)} />
-      )}
+      {showAddModal && <TruckFormModal onSave={handleAdd} onClose={() => setShowAddModal(false)} />}
     </>
   );
 }

@@ -1,7 +1,3 @@
-// Generic status pill: pass the raw enum value plus a small config object
-// mapping it to a human label and a color meaning (good/active/attention/
-// urgent/neutral). Reused as-is for trip status, payment status, and
-// document expiry status from Phase 5 onward — only the config changes.
 export const TRUCK_STATUS_CONFIG = {
   AVAILABLE: { label: 'Available', variant: 'good' },
   ON_TRIP: { label: 'On trip', variant: 'active' },
@@ -14,6 +10,27 @@ export const DRIVER_STATUS_CONFIG = {
   ON_LEAVE: { label: 'On leave', variant: 'attention' },
   TERMINATED: { label: 'Terminated', variant: 'neutral' },
 };
+
+export const TRIP_STATUS_CONFIG = {
+  ONGOING: { label: 'Ongoing', variant: 'active' },
+  COMPLETED: { label: 'Completed', variant: 'good' },
+  CANCELLED: { label: 'Cancelled', variant: 'neutral' },
+};
+
+export const DOCUMENT_STATUS_CONFIG = {
+  VALID: { label: 'Valid', variant: 'good' },
+  EXPIRING_SOON: { label: 'Expiring soon', variant: 'attention' },
+  EXPIRED: { label: 'Expired', variant: 'urgent' },
+};
+
+export const MAINTENANCE_STATUS_CONFIG = {
+  DUE: { label: 'Due', variant: 'attention' },
+  OK: { label: 'OK', variant: 'good' },
+  SUPERSEDED: { label: 'Superseded', variant: 'neutral' },
+};
+
+// The due / superseded flags are worked out by the backend, so every page agrees.
+export const maintenanceState = (record) => (record.superseded ? 'SUPERSEDED' : record.due ? 'DUE' : 'OK');
 
 export default function StatusBadge({ status, config }) {
   const entry = config[status] || { label: status, variant: 'neutral' };
