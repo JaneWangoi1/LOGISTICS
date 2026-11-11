@@ -22,6 +22,7 @@ export default function App() {
       <BrowserRouter>
         <Routes>
           <Route path="/login" element={<Login />} />
+          <Route path="*" element={<Navigate to="/" replace />} />
           <Route path="/" element={<ProtectedRoute><AppLayout /></ProtectedRoute>}>
             <Route index element={<Dashboard />} />
             <Route path="trucks" element={<Trucks />} />
